@@ -1,0 +1,151 @@
+{
+	"id": "ceb91b62-99bf-ffe0-110e-2438ec7fcc09",
+	"name": "DDDRequests",
+	"description": "",
+	"order": [
+		"2a1cc269-4e43-5056-e9c6-0a0807625059",
+		"f76419d0-e692-1c5e-c9f8-e5eb05fce23e",
+		"07fcba0f-cbb4-5ac0-5a3d-bce9523121b6",
+		"c1e0a5af-59fd-19eb-ecaa-e11d7c33a0ea"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1587523189492,
+	"owner": "10535749",
+	"public": false,
+	"requests": [
+		{
+			"id": "07fcba0f-cbb4-5ac0-5a3d-bce9523121b6",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://localhost:44339/api/money/store",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1587523851799,
+			"name": "Store Money",
+			"description": "",
+			"collectionId": "ceb91b62-99bf-ffe0-110e-2438ec7fcc09",
+			"responses": [],
+			"rawModeData": "{\n\t\"Username\": \"isagani\",\n\t\"CurrencyId\": 2,\n\t\"Amount\": 250\n}"
+		},
+		{
+			"id": "2a1cc269-4e43-5056-e9c6-0a0807625059",
+			"headers": "//Accept: application/json\nContent-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Accept",
+					"value": "application/json",
+					"description": "",
+					"enabled": false
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://localhost:44339/api/user/register",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "ceb91b62-99bf-ffe0-110e-2438ec7fcc09",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Register User",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1587523244390,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"Username\": \"leonarda\"\n}"
+		},
+		{
+			"id": "c1e0a5af-59fd-19eb-ecaa-e11d7c33a0ea",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://localhost:44339/api/money/exchange",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "ceb91b62-99bf-ffe0-110e-2438ec7fcc09",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Exchange Money",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1587523993500,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"Username\": \"isagani\",\n\t\"FromCurrencyId\": 2,\n\t\"Amount\": 150,\n\t\"ToCurrencyId\": 1\n}"
+		},
+		{
+			"id": "f76419d0-e692-1c5e-c9f8-e5eb05fce23e",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "https://localhost:44339/api/money/balance?username=isagani",
+			"queryParams": [
+				{
+					"key": "username",
+					"value": "isagani",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1587523743854,
+			"name": "Check Balance",
+			"description": "",
+			"collectionId": "ceb91b62-99bf-ffe0-110e-2438ec7fcc09",
+			"responses": []
+		}
+	]
+}
