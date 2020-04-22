@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TradingEngine.Api.Domain.Trading;
+using TradingEngine.Api.Domain.Monies;
 using TradingEngine.Api.Domain.User;
 using TradingEngine.Api.Implementations;
 

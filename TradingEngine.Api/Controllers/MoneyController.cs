@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TradingEngine.Api.Domain.Trading;
+using TradingEngine.Api.Domain.Monies;
 using TradingEngine.Api.Domain.User;
 using TradingEngine.Api.Model.DTO;
 
-namespace TradingEngine.Api.Controller
+namespace TradingEngine.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,19 +26,26 @@ namespace TradingEngine.Api.Controller
         // GET: api/trading/balance
         [Route("balance")]
         [HttpGet]
-        public async Task<ActionResult> Balance(string username)
+        public async Task<IActionResult> Balance(string username)
         {
-            var user = await _userService.GetUserAsync(username);
-            return Ok(user.Balance.GetAllMonies());
+            try
+            {
+                var user = await _userService.GetUserAsync(username);
+                return Ok(user.Balance.GetAllMonies());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
         [Route("store")]
         [HttpPost]
-        public async Task<ActionResult> Store([FromBody] AddMoneyRequest request)
+        public async Task<IActionResult> Store([FromBody] AddMoneyRequest request)
         {
             try
             {
-                var currency = await _currencyService.GetCurrency(request.CurrencyId);
+                var currency = await _currencyService.GetCurrencyAsync(request.CurrencyId);
                 var money = new Money() { Currency = currency, Amount = request.Amount };
                 var user = await _userService.GetUserAsync(request.Username);
 
@@ -55,12 +62,12 @@ namespace TradingEngine.Api.Controller
 
         [Route("exchange")]
         [HttpPost]
-        public async Task<ActionResult> Exchange([FromBody] ExchangeMoneyRequest request)
+        public async Task<IActionResult> Exchange([FromBody] ExchangeMoneyRequest request)
         {
             try
             {
-                var fromCurrency = await _currencyService.GetCurrency(request.FromCurrencyId);
-                var toCurrency = await _currencyService.GetCurrency(request.ToCurrencyId);
+                var fromCurrency = await _currencyService.GetCurrencyAsync(request.FromCurrencyId);
+                var toCurrency = await _currencyService.GetCurrencyAsync(request.ToCurrencyId);
                 var money = new Money() { Currency = fromCurrency, Amount = request.Amount };
                 var user = await _userService.GetUserAsync(request.Username);
 
@@ -77,11 +84,11 @@ namespace TradingEngine.Api.Controller
 
         [Route("send")]
         [HttpPost]
-        public async Task<ActionResult> Send([FromBody] SendMoneyRequest request)
+        public async Task<IActionResult> Send([FromBody] SendMoneyRequest request)
         {
             try
             {
-                var currency = await _currencyService.GetCurrency(request.CurrencyId);
+                var currency = await _currencyService.GetCurrencyAsync(request.CurrencyId);
                 var money = new Money() { Currency = currency, Amount = request.Amount };
                 var fromUser = await _userService.GetUserAsync(request.FromUsername);
                 var toUser = await _userService.GetUserAsync(request.ToUsername);

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TradingEngine.Api.Implementations;
 using TradingEngine.Api.Model.GeneratedContext;
 
-namespace TradingEngine.Api.Domain.Trading
+namespace TradingEngine.Api.Domain.Monies
 {
     public class CurrencyService : ICurrencyService
     {
@@ -19,7 +19,7 @@ namespace TradingEngine.Api.Domain.Trading
             return await _unitOfWork.RepositoryFor<Currency>().GetAll();
         }
 
-        public async Task<Currency> GetCurrency(int currencyId)
+        public async Task<Currency> GetCurrencyAsync(int currencyId)
         {
             return await _unitOfWork.RepositoryFor<Currency>().GetById(currencyId);
         }

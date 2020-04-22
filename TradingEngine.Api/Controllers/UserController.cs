@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using TradingEngine.Api.Domain.User;
 using TradingEngine.Api.Model.DTO;
 
-namespace TradingEngine.Api.Controller
+namespace TradingEngine.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,7 +20,7 @@ namespace TradingEngine.Api.Controller
 
         [Route("register")]
         [HttpPost]
-        public async Task<ActionResult> Register([FromBody] RegisterUser user)
+        public async Task<IActionResult> Register([FromBody] RegisterUser user)
         {
             try
             {

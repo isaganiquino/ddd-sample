@@ -1,4 +1,4 @@
-﻿using TradingEngine.Api.Domain.Trading;
+﻿using TradingEngine.Api.Domain.Monies;
 using TradingEngine.Api.Model.GeneratedContext;
 
 namespace TradingEngine.Api.Domain.User

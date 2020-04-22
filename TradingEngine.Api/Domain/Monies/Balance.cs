@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TradingEngine.Api.Model.GeneratedContext;
 
-namespace TradingEngine.Api.Domain.Trading
+namespace TradingEngine.Api.Domain.Monies
 {
     public class Balance
     {

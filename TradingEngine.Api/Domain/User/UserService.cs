@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
-using TradingEngine.Api.Domain.Trading;
+using TradingEngine.Api.Domain.Monies;
 using TradingEngine.Api.Implementations;
 using TradingEngine.Api.Model.GeneratedContext;
 using EntityUser = TradingEngine.Api.Model.GeneratedContext.User;
