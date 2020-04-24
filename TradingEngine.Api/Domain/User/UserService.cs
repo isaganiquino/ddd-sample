@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using TradingEngine.Api.Domain.Monies;
+using TradingEngine.Api.Domain.User.Events;
 using TradingEngine.Api.Implementations;
 using TradingEngine.Api.Model.GeneratedContext;
 using EntityUser = TradingEngine.Api.Model.GeneratedContext.User;
@@ -42,6 +43,17 @@ namespace TradingEngine.Api.Domain.User
                 }
 
                 await _unitOfWork.Commit();
+
+                if (userBalance.Id > 0)
+                {
+                    OnUpdateBalanceEventDispatcher.DispatchOnUpdateBalanceEvent(new OnUpdateBalanceEventArgs()
+                    {
+                        Id = userBalance.Id,
+                        UserId = userBalance.UserId,
+                        CurrencyId = userBalance.CurrencyId,
+                        Amount = userBalance.Amount
+                    });
+                }
             }
 
             return await GetUserAsync(user.Username);
