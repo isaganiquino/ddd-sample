@@ -8,9 +8,9 @@ namespace TradingEngine.Api.Domain.User.Events
 {
     public class OnUpdateBalanceEventHandler : ISubscriber<OnUpdateBalanceEventArgs>
     {
-        public void Handle(OnUpdateBalanceEventArgs e)
+        public void OnEvent(OnUpdateBalanceEventArgs e)
         {
-            
+            Console.WriteLine(string.Format("Update balance event fired!"));
         }
     }
 }

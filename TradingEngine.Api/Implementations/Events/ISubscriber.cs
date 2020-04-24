@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace TradingEngine.Api.Implementations.Events
 {
-    interface ISubscriber<T>
+    public interface ISubscriber<in T>
     {
-        void Handle(T e);
+        void OnEvent(T e);
     }
 }

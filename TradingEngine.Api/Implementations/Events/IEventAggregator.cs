@@ -7,7 +7,8 @@ namespace TradingEngine.Api.Implementations.Events
 {
     public interface IEventAggregator
     {
-        void Register(object subscriber);
-        void Raise<TEvent>(TEvent eventToPublish);
+        void Subscribe(object subscriber);
+        void Unsubscribe(object subscriber);
+        void Publish<TEvent>(TEvent eventToPublish);
     }
 }

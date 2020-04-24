@@ -11,8 +11,8 @@ namespace TradingEngine.Api.Domain.User.Events
         public static void DispatchOnUpdateBalanceEvent(OnUpdateBalanceEventArgs eventArgs)
         {
             var ea = new EventAggregator();
-            ea.Register(new OnUpdateBalanceEventHandler());
-            ea.Raise(eventArgs);
+            ea.Subscribe(new OnUpdateBalanceEventHandler());
+            ea.Publish(eventArgs);
         }
     }
 }

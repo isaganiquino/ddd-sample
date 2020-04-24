@@ -1,60 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Threading;
 
 namespace TradingEngine.Api.Implementations.Events
 {
     public class EventAggregator : IEventAggregator
     {
-        private readonly Dictionary<Type, List<WeakReference>> _eventSubscriberList =
+        private readonly Dictionary<Type, List<WeakReference>> eventSubscriberLists =
             new Dictionary<Type, List<WeakReference>>();
+        private readonly object padLock = new object();
 
-        private readonly object _lock = new object();
-
-        public void Raise<TEvent>(TEvent eventToPublish)
+        public void Subscribe(object subscriber)
         {
-            var subscriberType = typeof(ISubscriber<>).MakeGenericType(typeof(TEvent));
-            var subscribers = GetSubscribers(subscriberType);
-            List<WeakReference> subscribersToRemove = new List<WeakReference>();
-
-            foreach (var weakSubsriber in subscribers)
+            Type type = subscriber.GetType();
+            var subscriberTypes = GetSubscriberInterfaces(type)
+                .ToArray();
+            if (!subscriberTypes.Any())
             {
-                if (weakSubsriber.IsAlive)
-                {
-                    var subsriber = (ISubscriber<TEvent>)weakSubsriber.Target;
-                    var syncContext = SynchronizationContext.Current;
-                    if (syncContext == null)
-                        syncContext = new SynchronizationContext();
-
-                    syncContext.Post(s => subsriber.Handle(eventToPublish), null);
-                }
-                else
-                {
-                    subscribersToRemove.Add(weakSubsriber);
-                }
+                throw new ArgumentException("subscriber doesn't implement ISubscriber<>");
             }
 
-            if (subscribersToRemove.Any())
+            lock (padLock)
             {
-                lock (_lock)
-                {
-                    foreach (var item in subscribersToRemove)
-                    {
-                        subscribers.Remove(item);
-                    }
-                }
-            }
-        }
-
-        public void Register(object subscriber)
-        {
-            lock (_lock)
-            {
-                var subscriberTypes =
-                    subscriber.GetType().GetInterfaces().Where(i => i.IsGenericType
-                    && i.GetGenericTypeDefinition() == typeof(ISubscriber<>));
-
                 var weakReference = new WeakReference(subscriber);
                 foreach (var subscriberType in subscriberTypes)
                 {
@@ -64,19 +33,77 @@ namespace TradingEngine.Api.Implementations.Events
             }
         }
 
+        public void Unsubscribe(object subscriber)
+        {
+            Type type = subscriber.GetType();
+            var subscriberTypes = GetSubscriberInterfaces(type);
+
+            lock (padLock)
+            {
+                foreach (var subscriberType in subscriberTypes)
+                {
+                    var subscribers = GetSubscribers(subscriberType);
+                    subscribers.RemoveAll(x => x.IsAlive && object.ReferenceEquals(x.Target, subscriber));
+                }
+            }
+        }
+
+        public void Publish<TEvent>(TEvent eventToPublish)
+        {
+            var subscriberType = typeof(ISubscriber<>).MakeGenericType(typeof(TEvent));
+            var subscribers = GetSubscribers(subscriberType);
+            List<WeakReference> subscribersToRemove = new List<WeakReference>();
+
+            WeakReference[] subscribersArray;
+            lock (padLock)
+            {
+                subscribersArray = subscribers.ToArray();
+            }
+
+            foreach (var weakSubscriber in subscribersArray)
+            {
+                ISubscriber<TEvent> subscriber = (ISubscriber<TEvent>)weakSubscriber.Target;
+                if (subscriber != null)
+                {
+                    subscriber.OnEvent(eventToPublish);
+                }
+                else
+                {
+                    subscribersToRemove.Add(weakSubscriber);
+                }
+            }
+            if (subscribersToRemove.Any())
+            {
+                lock (padLock)
+                {
+                    foreach (var remove in subscribersToRemove)
+                        subscribers.Remove(remove);
+                }
+            }
+        }
+
         private List<WeakReference> GetSubscribers(Type subscriberType)
         {
             List<WeakReference> subscribers;
-            lock (_lock)
+            lock (padLock)
             {
-                var found = _eventSubscriberList.TryGetValue(subscriberType, out subscribers);
+                var found = eventSubscriberLists.TryGetValue(subscriberType, out subscribers);
                 if (!found)
                 {
                     subscribers = new List<WeakReference>();
-                    _eventSubscriberList.Add(subscriberType, subscribers);
+                    eventSubscriberLists.Add(subscriberType, subscribers);
                 }
             }
             return subscribers;
         }
+
+        private IEnumerable<Type> GetSubscriberInterfaces(Type subscriberType)
+        {
+            return subscriberType
+                .GetInterfaces()
+                .Where(i => i.IsGenericType &&
+                    i.GetGenericTypeDefinition() == typeof(ISubscriber<>));
+        }
     }
 }
+
