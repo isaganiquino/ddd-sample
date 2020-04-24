@@ -8,7 +8,7 @@ namespace TradingEngine.Api.Domain.User.Events
 {
     public class OnUpdateBalanceEventDispatcher
     {
-        public static void DispatchOnUpdateBalanceEvent(OnUpdateBalanceEventArgs eventArgs)
+        public static void Dispatch(OnUpdateBalanceEventArgs eventArgs)
         {
             var ea = new EventAggregator();
             ea.Subscribe(new OnUpdateBalanceEventHandler());

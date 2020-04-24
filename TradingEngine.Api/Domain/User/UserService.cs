@@ -46,7 +46,7 @@ namespace TradingEngine.Api.Domain.User
 
                 if (userBalance.Id > 0)
                 {
-                    OnUpdateBalanceEventDispatcher.DispatchOnUpdateBalanceEvent(new OnUpdateBalanceEventArgs()
+                    OnUpdateBalanceEventDispatcher.Dispatch(new OnUpdateBalanceEventArgs()
                     {
                         Id = userBalance.Id,
                         UserId = userBalance.UserId,
